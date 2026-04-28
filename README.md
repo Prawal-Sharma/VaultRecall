@@ -27,19 +27,125 @@ VaultRecall v0.1 supports:
 - Markdown session logs written to `VaultRecall/Sessions/YYYY-MM-DD.md`
 - Clean local web UI
 
-## Demo vault compatibility
+## Vault compatibility
 
-This app was first built against an Obsidian-style Markdown vault called `KnowledgeBank`, but it is designed to work with any folder of Markdown files.
+VaultRecall works with any local folder of Markdown files, including normal Obsidian vaults.
 
-VaultRecall looks for recall cards like this:
+For v0.1, the important distinction is:
+
+- VaultRecall can **scan and index** any Markdown/Obsidian vault.
+- VaultRecall can **quiz you automatically** when it finds explicit recall prompts in your notes.
+- VaultRecall does **not yet generate questions from arbitrary prose** unless you add recall prompts yourself. That is planned for a later AI-assisted version.
+
+This app was first built against an Obsidian-style Markdown vault called `KnowledgeBank`, but it is designed to remain generic.
+
+## Recommended note structure
+
+VaultRecall works best when each concept note has a predictable structure. You do not need to use this exact format, but the closer your notes are to it, the more useful the app becomes.
 
 ```md
+---
+type: concept
+tags: [ai, rag]
+---
+
+# RAG
+
+## One-line definition
+Retrieval-augmented generation lets an LLM answer using retrieved external context.
+
+## Why it matters
+RAG helps keep answers grounded, current, and inspectable without retraining the model.
+
+## Core ideas
+- Index useful source material.
+- Retrieve relevant chunks at query time.
+- Give retrieved context to the model.
+- Evaluate both retrieval quality and answer quality.
+
+## Related notes
+- [[Embeddings]]
+- [[Evaluation]]
+- [[Inference and Serving]]
+
 ## Recall prompts
 - Q: What problem does RAG solve?
   A: It lets an LLM answer using retrieved external context instead of relying only on model weights.
 - Q: When would you prefer fine-tuning over RAG?
   A: When you need behavioural/style adaptation or task-specific patterns rather than factual retrieval.
 ```
+
+### Minimum useful structure
+
+If you only do one thing, add this section to notes you want to study:
+
+```md
+## Recall prompts
+- Q: Your question here?
+  A: Your expected answer here.
+```
+
+### Recommended conventions
+
+- Use one Markdown file per concept, paper, or topic.
+- Use clear note titles, e.g. `RAG.md`, `System Design.md`, `Attention Is All You Need.md`.
+- Use Obsidian wikilinks for related ideas: `[[Embeddings]]`, `[[Evaluation]]`.
+- Put recall prompts under a heading named exactly `## Recall prompts`.
+- Use `Q:` for questions and `A:` for answers.
+- Keep answers short enough to review quickly, but specific enough to be useful.
+- Prefer practical prompts over trivia.
+
+Good prompt:
+
+```md
+- Q: A RAG system returns plausible but wrong answers. What are three likely failure points?
+  A: Retrieval may be missing relevant chunks, ranking may be poor, or the generation step may be ignoring/overtrusting context.
+```
+
+Less useful prompt:
+
+```md
+- Q: What is RAG?
+  A: Retrieval-augmented generation.
+```
+
+## FAQ
+
+### Can VaultRecall do active recall on any Obsidian vault?
+
+Yes, if the vault is local and made of Markdown files. VaultRecall can scan the notes, folders, frontmatter, tags, headings, and wikilinks.
+
+For v0.1, it needs explicit `## Recall prompts` sections to create quiz questions. If your vault has no recall prompts, VaultRecall can still index it, but it will not have much to quiz you on yet.
+
+### Does my vault need to be created in Obsidian?
+
+No. Any folder of `.md` files can work. Obsidian compatibility is useful because wikilinks, folders, and note-per-concept conventions make the vault easier to study.
+
+### Will VaultRecall modify my notes?
+
+v0.1 does not rewrite your existing notes. It writes its own local state to:
+
+```text
+.vaultrecall/state.json
+```
+
+And it writes session logs to:
+
+```text
+VaultRecall/Sessions/YYYY-MM-DD.md
+```
+
+### Does VaultRecall use AI?
+
+Not in v0.1. The first version is deterministic and local. AI-generated questions and AI answer grading are planned for later versions.
+
+### Can it generate questions from notes that do not already have recall prompts?
+
+Not yet. That is one of the most important next features. The planned AI-assisted version will be able to read a note and suggest recall prompts automatically.
+
+### Should I commit `.vaultrecall/state.json` to Git?
+
+Usually no. That file is personal review history. If you use Git, consider adding `.vaultrecall/` to your vault's `.gitignore` unless you intentionally want to sync review state across machines.
 
 ## Getting started
 
