@@ -8,9 +8,11 @@ Point it at a folder of `.md` files, scan the vault, run study sessions from ext
 
 Obsidian is excellent for building a knowledge base, but browsing notes is not the same thing as learning. VaultRecall turns your notes into an active recall workflow without requiring Anki, cloud accounts, or a proprietary format.
 
-## Current version: v0.1
+## Current version
 
-VaultRecall v0.1 supports:
+VaultRecall now supports local recall plus optional AI-assisted question generation and answer grading.
+
+Current features:
 
 - Local vault path input
 - Markdown/Obsidian vault scanning
@@ -22,6 +24,9 @@ VaultRecall v0.1 supports:
   - all questions
   - specific folders
 - Self-grading with `Again`, `Hard`, `Good`, `Easy`
+- Optional OpenAI-powered question generation from arbitrary notes
+- Approval/edit/discard flow for generated questions
+- Optional OpenAI-powered answer grading with suggested rating
 - Lightweight spaced repetition scheduling
 - Local state stored in the vault under `.vaultrecall/state.json`
 - Markdown session logs written to `VaultRecall/Sessions/YYYY-MM-DD.md`
@@ -35,7 +40,8 @@ For v0.1, the important distinction is:
 
 - VaultRecall can **scan and index** any Markdown/Obsidian vault.
 - VaultRecall can **quiz you automatically** when it finds explicit recall prompts in your notes.
-- VaultRecall does **not yet generate questions from arbitrary prose** unless you add recall prompts yourself. That is planned for a later AI-assisted version.
+- VaultRecall can generate draft questions from arbitrary prose if you connect an OpenAI API key.
+- Generated questions are stored in VaultRecall app state by default, not written into your Markdown notes.
 
 This app was first built against an Obsidian-style Markdown vault called `KnowledgeBank`, but it is designed to remain generic.
 
@@ -115,7 +121,7 @@ Less useful prompt:
 
 Yes, if the vault is local and made of Markdown files. VaultRecall can scan the notes, folders, frontmatter, tags, headings, and wikilinks.
 
-For v0.1, it needs explicit `## Recall prompts` sections to create quiz questions. If your vault has no recall prompts, VaultRecall can still index it, but it will not have much to quiz you on yet.
+Without AI, it needs explicit `## Recall prompts` sections to create quiz questions. With an OpenAI API key connected, it can generate draft questions from ordinary notes and let you approve/edit/discard them.
 
 ### Does my vault need to be created in Obsidian?
 
@@ -123,7 +129,7 @@ No. Any folder of `.md` files can work. Obsidian compatibility is useful because
 
 ### Will VaultRecall modify my notes?
 
-v0.1 does not rewrite your existing notes. It writes its own local state to:
+VaultRecall does not rewrite your existing notes by default. Generated questions are stored in app state unless a future write-back feature is explicitly added/enabled. It writes local state to:
 
 ```text
 .vaultrecall/state.json
@@ -137,11 +143,11 @@ VaultRecall/Sessions/YYYY-MM-DD.md
 
 ### Does VaultRecall use AI?
 
-Not in v0.1. The first version is deterministic and local. AI-generated questions and AI answer grading are planned for later versions.
+Only if you configure an OpenAI API key and click an AI action. Scanning, self-review, scheduling, and ordinary recall sessions work locally without AI.
 
 ### Can it generate questions from notes that do not already have recall prompts?
 
-Not yet. That is one of the most important next features. The planned AI-assisted version will be able to read a note and suggest recall prompts automatically.
+Yes. Connect an OpenAI API key, choose a note, generate draft questions, then approve/edit/discard them. Approved generated questions are stored in `.vaultrecall/state.json` by default.
 
 ### Should I commit `.vaultrecall/state.json` to Git?
 
@@ -189,8 +195,8 @@ Then click **Scan vault**.
 2. Check the dashboard counts.
 3. Start with **Due reviews** if you have history, or **All questions** for a new vault.
 4. Answer the question before revealing the expected answer.
-5. Reveal the answer.
-6. Rate yourself:
+5. Reveal the answer, or optionally click **Grade with AI**.
+6. Rate yourself, or accept the AI-suggested rating:
    - **Again** — I missed it.
    - **Hard** — I barely got it.
    - **Good** — I got it.
@@ -205,8 +211,9 @@ VaultRecall is local-first.
 - It reads Markdown files from the vault path you provide.
 - It writes review state to `.vaultrecall/state.json` inside your vault.
 - It writes session logs to `VaultRecall/Sessions/` inside your vault.
-- v0.1 does not send your notes to any AI provider.
-- v0.1 has no accounts, cloud sync, or telemetry.
+- It sends note content to OpenAI only when you explicitly use AI generation or AI grading.
+- API settings are stored in local vault state for now; do not commit `.vaultrecall/state.json` if it contains private keys.
+- It has no accounts, cloud sync, or telemetry.
 
 ## Project structure
 

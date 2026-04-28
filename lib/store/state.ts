@@ -17,12 +17,13 @@ export async function ensureState(vaultPath: string): Promise<VaultState> {
     return {
       ...parsed,
       vaultPath,
+      generatedQuestions: parsed.generatedQuestions ?? {},
       schedules: parsed.schedules ?? {},
       reviews: parsed.reviews ?? [],
       sessions: parsed.sessions ?? [],
     };
   } catch {
-    const initial: VaultState = { vaultPath, schedules: {}, reviews: [], sessions: [] };
+    const initial: VaultState = { vaultPath, generatedQuestions: {}, schedules: {}, reviews: [], sessions: [] };
     await saveState(vaultPath, initial);
     return initial;
   }

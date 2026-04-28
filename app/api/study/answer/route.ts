@@ -10,9 +10,23 @@ export async function POST(req: NextRequest) {
     if (!['again', 'hard', 'good', 'easy'].includes(rating)) return NextResponse.json({ error: 'Invalid rating' }, { status: 400 });
 
     const scan = await scanVault(vaultPath);
-    const question = scan.questions.find((q) => q.id === questionId);
-    if (!question) return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     const state = await ensureState(scan.vaultPath);
+    const generated = Object.values(state.generatedQuestions).filter((q) => q.status === 'approved').map((q) => ({
+      id: q.id,
+      vaultPath: scan.vaultPath,
+      noteId: q.noteId,
+      noteTitle: q.noteTitle,
+      notePath: q.notePath,
+      folder: q.folder,
+      question: q.question,
+      answer: q.answer,
+      tags: [],
+      origin: 'generated' as const,
+      approved: true,
+    }));
+    const allQuestions = [...scan.questions, ...generated];
+    const question = allQuestions.find((q) => q.id === questionId);
+    if (!question) return NextResponse.json({ error: 'Question not found' }, { status: 404 });
     const session = state.sessions.find((s) => s.id === sessionId);
     if (!session) return NextResponse.json({ error: 'Session not found' }, { status: 404 });
 
@@ -28,7 +42,7 @@ export async function POST(req: NextRequest) {
       completedSession = session;
       const sessionReviews = state.reviews.filter((r) => session.questionIds.includes(r.questionId));
       const reviewed = sessionReviews.map((r) => {
-        const q = scan.questions.find((candidate) => candidate.id === r.questionId)!;
+        const q = allQuestions.find((candidate) => candidate.id === r.questionId)!;
         return { noteTitle: q.noteTitle, notePath: q.notePath, question: q.question, rating: r.rating };
       });
       await writeSessionLog(scan.vaultPath, session, reviewed);

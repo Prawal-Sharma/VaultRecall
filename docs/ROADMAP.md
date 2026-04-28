@@ -1,6 +1,8 @@
 # VaultRecall Roadmap
 
-## v0.1 — Local recall MVP
+## Shipped
+
+### Local recall MVP
 
 - [x] Scan Markdown vaults
 - [x] Extract recall prompts from notes
@@ -10,25 +12,38 @@
 - [x] Track weak questions
 - [x] Write session logs into the vault
 
-## v0.2 — Better study cockpit
+### AI-assisted recall foundation
+
+- [x] Store local AI settings
+- [x] OpenAI provider integration
+- [x] Generate draft questions from arbitrary notes
+- [x] Approve/edit/discard generated questions
+- [x] Store generated questions in app state by default
+- [x] AI answer grading with suggested rating
+- [x] Minimal professional UI refresh
+
+## Next
+
+### v0.3 — Better study cockpit
 
 - [ ] Session history screen
 - [ ] Review calendar / due forecast
 - [ ] Weak-area dashboard by folder/tag/note
-- [ ] Search and filter questions
-- [ ] More flexible recall prompt formats
+- [ ] Search and filter notes/questions
 - [ ] Better empty-state onboarding
 - [ ] Import/export review state
+- [ ] Keyboard shortcuts for study sessions
 
-## v0.3 — AI-assisted recall
+### v0.4 — Better AI workflows
 
-- [ ] Optional AI answer grading
-- [ ] Generate new recall questions from notes
-- [ ] Provider abstraction for OpenAI, Anthropic, and Ollama
-- [ ] Rubric-based grading
+- [ ] Batch-generate questions for folders
+- [ ] Generate questions by difficulty
+- [ ] Rubric-based grading modes
 - [ ] Suggested note edits for weak areas
+- [ ] Provider abstraction for Anthropic and Ollama
+- [ ] Optional write-back of approved questions to Markdown
 
-## v0.4 — Obsidian-native intelligence
+### v0.5 — Obsidian-native intelligence
 
 - [ ] Study paths from MOCs
 - [ ] Link-aware question sequencing
@@ -36,7 +51,7 @@
 - [ ] Write richer session reports to the vault
 - [ ] Optional Obsidian plugin companion
 
-## v1.0 — Polished local learning system
+### v1.0 — Polished local learning system
 
 - [ ] Desktop build
 - [ ] Multi-vault support

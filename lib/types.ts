@@ -22,6 +22,37 @@ export type RecallQuestion = {
   answer: string;
   sourceHeading?: string;
   tags: string[];
+  origin?: 'note' | 'generated';
+  approved?: boolean;
+};
+
+export type GeneratedQuestion = {
+  id: string;
+  vaultPath: string;
+  noteId: string;
+  noteTitle: string;
+  notePath: string;
+  folder: string;
+  type: 'recall' | 'explain' | 'scenario' | 'compare';
+  question: string;
+  answer: string;
+  status: 'pending' | 'approved' | 'discarded';
+  createdAt: string;
+};
+
+export type AiSettings = {
+  provider: 'openai';
+  apiKey?: string;
+  model: string;
+};
+
+export type AiGrade = {
+  score: number;
+  summary: string;
+  correct: string[];
+  missing: string[];
+  idealAnswer: string;
+  suggestedRating: ReviewRating;
 };
 
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy';
@@ -47,6 +78,8 @@ export type QuestionSchedule = {
 export type VaultState = {
   vaultPath: string;
   indexedAt?: string;
+  aiSettings?: AiSettings;
+  generatedQuestions: Record<string, GeneratedQuestion>;
   schedules: Record<string, QuestionSchedule>;
   reviews: ReviewRecord[];
   sessions: StudySessionSummary[];
