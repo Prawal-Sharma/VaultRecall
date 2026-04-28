@@ -1,0 +1,26 @@
+{
+  "name": "vaultrecall",
+  "version": "0.1.0",
+  "private": false,
+  "description": "A local-first active recall web app for Obsidian and Markdown vaults.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3",
+    "next": "^15.5.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^15.5.7",
+    "typescript": "^5.9.3"
+  }
+}
